@@ -31,6 +31,22 @@ $charge = $client->pix->create([
     'client' => 'Nome do Cliente'
 ]);
 
+// A resposta incluirá:
+// - reference: Referência única da cobrança
+// - total: Valor total
+// - txid: ID da transação PIX
+// - qr_code_data: String para gerar o QR Code
+// - copy_paste: Código PIX Copia e Cola
+
+// Exemplo de resposta:
+// {
+//     "reference": "PIX-123ABC",
+//     "total": "100.00",
+//     "txid": "9d36b84f-c70b-4e21-b49d-4444d98a5222",
+//     "qr_code_data": "00020101021226890014br.gov.bcb.pix...",
+//     "copy_paste": "00020101021226890014br.gov.bcb.pix..."
+// }
+
 // Consultar uma cobrança
 $status = $client->pix->get('PIX-123ABC');
 
@@ -52,17 +68,59 @@ $status = $client->pixout->get('WD-123ABC');
 $cancel = $client->pixout->cancel('WD-123ABC');
 ```
 
+## Gerando QR Code
+
+O SDK retorna os dados necessários para gerar o QR Code (`qr_code_data`), mas não gera a imagem diretamente. 
+Você pode usar qualquer biblioteca de sua preferência para gerar o QR Code. Alguns exemplos:
+
+### Usando endroid/qr-code
+```php
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Writer\PngWriter;
+
+$writer = new PngWriter();
+$qrCode = QrCode::create($charge['qr_code_data']);
+$result = $writer->write($qrCode);
+
+// Salvar imagem
+$result->saveToFile('qrcode.png');
+
+// Ou retornar como base64
+$dataUri = $result->getDataUri();
+```
+
+### Usando chillerlan/php-qrcode
+```php
+use chillerlan\QRCode\QRCode;
+
+$qrcode = (new QRCode)->render($charge['qr_code_data']);
+```
+
+### Usando bacon/bacon-qr-code
+```php
+use BaconQrCode\Renderer\ImageRenderer;
+use BaconQrCode\Renderer\Image\ImagickImageBackEnd;
+use BaconQrCode\Renderer\RendererStyle\RendererStyle;
+use BaconQrCode\Writer;
+
+$renderer = new ImageRenderer(
+    new RendererStyle(300),
+    new ImagickImageBackEnd()
+);
+
+$writer = new Writer($renderer);
+$qrcode = base64_encode($writer->writeString($charge['qr_code_data']));
+```
+
 ## Documentação
 
 Para mais informações sobre os endpoints e parâmetros disponíveis, consulte a [documentação oficial](https://api.arvinpay.com/docs).
 
 ## Requisitos
 
-- PHP 7.4 ou superior
+- PHP 7.2 ou superior
 - Extensão JSON
 - Guzzle HTTP 7.0 ou superior
-- Endroid QR Code 6.0 ou superior
-- Chillerlan QR Code 5.0 ou superior
 
 ## Licença
 
