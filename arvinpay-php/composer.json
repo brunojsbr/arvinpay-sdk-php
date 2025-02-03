@@ -1,0 +1,25 @@
+{
+    "name": "arvinpay/sdk-php",
+    "description": "SDK oficial da ArvinPay para PHP",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "ArvinPay\\SDK\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "ArvinPay",
+            "email": "dev@arvinpay.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.4",
+        "guzzlehttp/guzzle": "^7.0",
+        "ext-json": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.0"
+    }
+} 
