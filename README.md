@@ -34,6 +34,9 @@ $charge = $client->pix->create([
 // Consultar uma cobrança
 $status = $client->pix->get('PIX-123ABC');
 
+// Cancelar uma cobrança
+$cancel = $client->pix->cancel('PIX-123ABC');
+
 // Criar um saque PIX
 $withdraw = $client->pixout->create([
     'amount' => 100.00,
@@ -44,6 +47,9 @@ $withdraw = $client->pixout->create([
 
 // Consultar um saque
 $status = $client->pixout->get('WD-123ABC');
+
+// Cancelar um saque
+$cancel = $client->pixout->cancel('WD-123ABC');
 ```
 
 ## Documentação
@@ -55,6 +61,8 @@ Para mais informações sobre os endpoints e parâmetros disponíveis, consulte 
 - PHP 7.4 ou superior
 - Extensão JSON
 - Guzzle HTTP 7.0 ou superior
+- Endroid QR Code 6.0 ou superior
+- Chillerlan QR Code 5.0 ou superior
 
 ## Licença
 
